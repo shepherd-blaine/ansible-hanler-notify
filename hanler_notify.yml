@@ -1,0 +1,21 @@
+- name: PoC handler can notify another handler
+  hosts: localhost
+  gather_facts: false
+  connection: local
+
+  tasks:
+    - name: Trigger first handler
+      ansible.builtin.command: /bin/true
+      changed_when: true
+      notify: handler_1
+
+  handlers:
+    - name: handler_1
+      ansible.builtin.debug:
+        msg: "HANDLER 1 executed"
+      changed_when: true
+      notify: handler_2
+
+    - name: handler_2
+      ansible.builtin.debug:
+        msg: "HANDLER 2 executed"
